@@ -1,9 +1,10 @@
-{% extends 'myapp/base.html' %} {% block content %}
+{% extends 'myapp/base.html' %}
+{% block content %}
 <div class="container py-5">
-    <h3>{{msg}}</h3>
+    <h3 class="text-light">{{msg}}</h3>
     <div class="card rounded-0 mb-5">
         <div class="card-header">
-            <div class="card-title h3 mb-0">List of Scheduled Busses</div>
+            <div class="card-title h3 mb-0">List of Scheduled Buses</div>
         </div>
         <div class="card-body">
             <div class="container-fluid">
@@ -33,8 +34,6 @@
                         <td class="px-2 py-1 align-middle">{{row.price}}</td>
                         <td class="px-2 py-1 align-middle">{{row.date}}</td>
                         <td class="px-2 py-1 align-middle">{{row.time}}</td>
-
-
                     </tr>
                     {% endfor %}
                 </table>
@@ -75,7 +74,4 @@
         </div>
     </div>
 </div>
-
-
-
 {% endblock %}
