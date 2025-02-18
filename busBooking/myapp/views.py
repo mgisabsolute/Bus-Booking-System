@@ -94,34 +94,29 @@ def cancellings(request):
         id_r = request.POST.get('bus_id')
 
         try:
-            book = Book.objects.get(id=id_r)  # Find the booking
+            book = Book.objects.get(id=id_r)
+            bus = Bus.objects.get(id=book.busid)
+
+            # Restore seat count
+            rem_r = bus.rem + book.nos
+            Bus.objects.filter(id=book.busid).update(rem=rem_r)
+
+            # Process refund
+            refund_amount = book.price * book.nos
+            wallet, created = Wallet.objects.get_or_create(user=request.user)
+            wallet.balance += refund_amount
+            wallet.save()
+
+            # Update booking status
+            Book.objects.filter(id=id_r).update(status='CANCELLED', nos=0)
+
+            messages.success(request, f"Your booking has been cancelled, and ₹{refund_amount} has been refunded to your wallet.")
+            return redirect(seebookings)
         except Book.DoesNotExist:
-            messages.error(request, "Sorry, this booking does not exist.")
-            return redirect('seebookings')
-
-        try:
-            bus = Bus.objects.get(id=book.busid)  # Find the corresponding bus
-        except Bus.DoesNotExist:
-            messages.error(request, "The bus for this booking no longer exists.")
-            return redirect('seebookings')
-
-        # Restore seat count
-        rem_r = bus.rem + book.nos
-        Bus.objects.filter(id=book.busid).update(rem=rem_r)
-
-        # Refund the user
-        refund_amount = book.price * book.nos
-        wallet, created = Wallet.objects.get_or_create(user=request.user)
-        wallet.balance += refund_amount
-        wallet.save()
-
-        # Update booking status
-        Book.objects.filter(id=id_r).update(status='CANCELLED', nos=0)
-
-        messages.success(request, f"Your booking has been cancelled. ₹{refund_amount} has been refunded to your wallet.")
-        return redirect('seebookings')
-
-    return render(request, 'myapp/findbus.html')
+            context["error"] = "Sorry, you have not booked that bus."
+            return render(request, 'myapp/error.html', context)
+    else:
+        return render(request, 'myapp/findbus.html')
 
 
 
@@ -207,42 +202,4 @@ def add_funds(request):
             messages.error(request, 'Please enter a valid amount')
     return redirect('wallet_view')
 
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import get_object_or_404
 
-@login_required(login_url='signin')
-@staff_member_required  # Ensures only admins can access this
-def cancel_bus_admin(request):
-    if request.method == "POST":
-        bus_id = request.POST.get('bus_id')
-
-        try:
-            bus = Bus.objects.get(id=bus_id)
-            bookings = Book.objects.filter(busid=bus_id, status="BOOKED")
-
-            if not bookings:
-                messages.info(request, "No active bookings found for this bus.")
-
-            for booking in bookings:
-                # Refund each passenger
-                refund_amount = booking.price * booking.nos
-                wallet, created = Wallet.objects.get_or_create(user=booking.userid)
-                wallet.balance += refund_amount
-                wallet.save()
-
-                # Update booking status
-                booking.status = "CANCELLED"
-                booking.nos = 0
-                booking.save()
-
-            # Delete the bus
-            bus.delete()
-
-            messages.success(request, f"Bus '{bus.bus_name}' was canceled. All passengers have been refunded ₹{refund_amount} each.")
-            return redirect('admin_dashboard')
-
-        except Bus.DoesNotExist:
-            messages.error(request, "Bus not found.")
-            return redirect('admin_dashboard')
-
-    return render(request, 'myapp/admin_cancel_bus.html')  # Create an admin UI for cancellation
