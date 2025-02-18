@@ -1,14 +1,14 @@
-{% extends 'myapp/base.html' %} {% block content %}
+{% extends 'myapp/base.html' %}
+{% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-5 col-md-7 col-sm-10 col-xs-12">
             <div class="card rounded-0">
                 <div class="card-header">
-                    <div class="card-title text-center h3 b-0">Registration</div>
-
+                    <div class="card-title text-center h3 mb-0">Registration</div>
                 </div>
                 <div class="card-body">
-                    <div class="contaier-fluid">
+                    <div class="container-fluid">
                         <form action="{% url 'signup' %}" method="post" id="registration-form">
                             {% csrf_token %}
                             <div class="mb-3">
@@ -33,5 +33,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
