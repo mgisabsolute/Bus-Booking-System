@@ -7,3 +7,4 @@ admin.site.register(Bus)
 admin.site.register(User)
 admin.site.register(Book)
 admin.site.register(Wallet)
+
