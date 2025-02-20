@@ -21,14 +21,21 @@
                             <div class="mb-3">
                                 <label for="date" class="control-labell">Date</label>
                                 <input name='date' id="date" class="form-control rounded-0" type="date" value="{% if data.date %}{{data.date}}{% endif %}" required>
-
+                            </div>
+                            <div class="mb-3">
+                                <label for="seat_class" class="control-labell">Seat Class</label>
+                                <select name="seat_class" id="seat_class" class="form-control rounded-0">
+                                    <option value="ALL">All Classes</option>
+                                    <option value="GEN">General</option>
+                                    <option value="SLP">Sleeper</option>
+                                    <option value="LUX">Luxury</option>
+                                </select>
                             </div>
                             {% if error %}
                             <div class="alert alert-danger">
                                 {{error}}
                             </div>
                             {% endif %}
-
                         </form>
                     </div>
                 </div>
@@ -39,5 +46,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
