@@ -18,6 +18,7 @@
                             <th class="p-1 text-center">BOOKING ID</th>
                             <th class="p-1 text-center">USER NAME</th>
                             <th class="p-1 text-center">BUS NAME</th>
+                            <th class="p-1 text-center">SEAT CLASS</th>
                             <th class="p-1 text-center">SOURCE</th>
                             <th class="p-1 text-center">DESTINATION</th>
                             <th class="p-1 text-center">NUM OF SEATS</th>
@@ -27,12 +28,13 @@
                             <th class="p-1 text-center">STATUS</th>
                         </tr>
                     </thead>
-
+                
                     {% for row in book_list %}
                     <tr>
                         <td class="px-2 py-1 align-middle">{{row.id}}</td>
                         <td class="px-2 py-1 align-middle">{{row.name}}</td>
                         <td class="px-2 py-1 align-middle">{{row.bus_name}}</td>
+                        <td class="px-2 py-1 align-middle">{{row.get_seat_class_display}}</td>
                         <td class="px-2 py-1 align-middle">{{row.source}}</td>
                         <td class="px-2 py-1 align-middle">{{row.dest}}</td>
                         <td class="px-2 py-1 align-middle">{{row.nos}}</td>
