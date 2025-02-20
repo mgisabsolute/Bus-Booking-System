@@ -27,11 +27,27 @@ def findbus(request):
         source_r = request.POST.get('source')
         dest_r = request.POST.get('destination')
         date_r = request.POST.get('date')
+        seat_class_r = request.POST.get('seat_class', 'GEN')
+        
         date_r = datetime.strptime(date_r,"%Y-%m-%d").date()
         year = date_r.strftime("%Y")
         month = date_r.strftime("%m")
         day = date_r.strftime("%d")
-        bus_list = Bus.objects.filter(source=source_r, dest=dest_r, date__year=year, date__month=month, date__day=day)
+        
+        # Add seat_class filter if provided
+        query_filter = {
+            'source': source_r, 
+            'dest': dest_r,
+            'date__year': year,
+            'date__month': month,
+            'date__day': day
+        }
+        
+        if seat_class_r != 'ALL':
+            query_filter['seat_class'] = seat_class_r
+            
+        bus_list = Bus.objects.filter(**query_filter)
+        
         if bus_list:
             return render(request, 'myapp/list.html', locals())
         else:
@@ -40,7 +56,6 @@ def findbus(request):
             return render(request, 'myapp/findbus.html', context)
     else:
         return render(request, 'myapp/findbus.html')
-
 
 @login_required(login_url='signin')
 def bookings(request):
@@ -51,7 +66,7 @@ def bookings(request):
         bus = Bus.objects.get(id=id_r)
 
         if bus:
-            total_cost = int(seats_r) * bus.price
+            total_cost = int(seats_r) * bus.get_price_by_class()
             wallet, created = Wallet.objects.get_or_create(user=request.user)
 
             # Check if user has enough funds
@@ -68,11 +83,20 @@ def bookings(request):
                 rem_r = bus.rem - seats_r
                 Bus.objects.filter(id=id_r).update(rem=rem_r)
 
-                # Create booking record
+                # Create booking record with seat class
                 book = Book.objects.create(
-                    name=request.user.username, email=request.user.email, userid=request.user.id,
-                    bus_name=bus.bus_name, source=bus.source, busid=id_r,
-                    dest=bus.dest, price=bus.price, nos=seats_r, date=bus.date, time=bus.time,
+                    name=request.user.username, 
+                    email=request.user.email, 
+                    userid=request.user.id,
+                    bus_name=bus.bus_name, 
+                    source=bus.source, 
+                    busid=id_r,
+                    dest=bus.dest, 
+                    price=bus.price, 
+                    nos=seats_r, 
+                    date=bus.date, 
+                    time=bus.time,
+                    seat_class=bus.seat_class,
                     status='BOOKED'
                 )
 
@@ -201,5 +225,7 @@ def add_funds(request):
         else:
             messages.error(request, 'Please enter a valid amount')
     return redirect('wallet_view')
+
+
 
 
