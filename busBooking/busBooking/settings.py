@@ -38,6 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -48,7 +53,36 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+# AllAuth settings
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+ACCOUNT_EMAIL_REQUIRED = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '30496536692-bk1ldhoq7pgjmca286gabr0585uhtlm9.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        
+        }
+    }
+}
+
+LOGIN_REDIRECT_URL = 'home'  # or 'dashboard', etc.
+LOGOUT_REDIRECT_URL = 'logout'
+ACCONT_LOGOUT_REDIRECT_URL = 'login'
+
+
 
 ROOT_URLCONF = 'busBooking.urls'
 
