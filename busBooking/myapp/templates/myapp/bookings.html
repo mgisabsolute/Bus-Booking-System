@@ -26,9 +26,11 @@
             </div>
 
             <!-- Modal body -->
+     
             <div class="modal-body">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" style="background-color: #ffffff;"><b>Bus name:</b> {{book.bus_name}}</li>
+                    <li class="list-group-item" style="background-color: #ffffff;"><b>Seat Class:</b> {{book.get_seat_class_display}}</li>
                     <li class="list-group-item" style="background-color: #ffffff;"><b>Starting point:</b> {{book.source}}</li>
                     <li class="list-group-item" style="background-color: #ffffff;"><b>Destination point:</b> {{book.dest}}</li>
                     <li class="list-group-item" style="background-color: #ffffff;"><b>Number of seats:</b> {{book.nos}}</li>
