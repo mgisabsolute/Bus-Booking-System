@@ -17,41 +17,59 @@
         }
         .navbar {
             background-color: #2e2e2e;
+            padding: 0.5rem 1rem;
         }
         .navbar-brand, .nav-link {
             color: #ffffff !important;
-            font-weight: bold; /* Make text bold */
-          
+            font-weight: bold;
+        }
+        /* Updated DVM logo styles */
+        .navbar-brand img {
+            height: 30px;
+            width: auto;
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: middle;
         }
         .card {
-            background-color: #474646;
+            background-color: #474646 !important;
             border: none;
+            border-radius: 15px !important;
         }
-        .alert {
-            background-color: #ff0000; /* Red background */
-            color: #ffffff; /* White text */
-            border-color: #ffffff; /* White border */
-            text-align: center; /* Center text */
-            font-weight: bold; /* Make text bold */
-            font-size: 1.5rem;
+        /* Override any other background colors */
+        .card.bg-info {
+            background-color: #474646 !important;
         }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+        /* Welcome message specific style */
+        .welcome-card {
+            background-color: #4a4a4a !important;
+            color: #ffffff;
+            border-radius: 15px;
+            margin-top: 2rem;
         }
-        .btn-primary:hover {
-            background-color: #001074;
-            border-color: #0e0034;
+        .welcome-card .card-body {
+            padding: 2rem;
         }
-        .btn-info {
-            background-color: #323232;
-            border-color: #494949;
+        /* Rest of the styles remain the same */
+        .table {
+            color: #ffffff !important;
         }
-        .btn-info:hover {
-            background-color: #262626;
-            border-color: #323232;
+        .table td, .table th {
+            color: #ffffff !important;
         }
-        /* Add to the existing style section in base.html */
+        .btn {
+            border-radius: 25px !important;
+        }
+        .form-control {
+            border-radius: 25px !important;
+            background-color: #565656;
+            color: #ffffff;
+            border: 1px solid #666;
+        }
+        .form-control:focus {
+            background-color: #565656;
+            color: #ffffff;
+        }
         .seat-gen {
             background-color: #474646;
         }
@@ -70,6 +88,58 @@
         tr.seat-lux:hover {
             background-color: #a88339;
         }
+        .modal-content {
+            background-color: #474646;
+            color: #ffffff;
+            border-radius: 15px;
+        }
+        .modal-header, .modal-footer {
+            border-color: #666;
+        }
+        .list-group-item {
+            background-color: #565656 !important;
+            color: #ffffff !important;
+            border-color: #666 !important;
+        }
+        /* Updated DVM logo styles */
+        .navbar-brand img {
+            height: 50px; /* Increased from 30px */
+            width: auto;
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        /* Large blue button style */
+        .btn-lg-custom {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+
+        /* Google login button style */
+        .btn-google {
+            position: relative;
+            padding-left: 50px;
+            text-align: left;
+            background-color: #4285f4;
+            color: white;
+        }
+
+        .btn-google::before {
+            content: "";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yMC42NiAxMi42OWMwLS41Ny0uMDUtMS4xLS4xNS0xLjYxSDEydjMuMDRoNC44NGMtLjIxIDEuMTEtLjg0IDIuMDUtMS43OCAyLjY5djIuMjNoMi45MmMxLjctMS41NyAyLjY4LTMuODggMi42OC02LjM1eiIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0xMiAyMWMzLjI0IDAgNS45NS0xLjA4IDcuOTMtMi45MmwtMi45Mi0yLjIzYy0uODEuNTQtMS44NC44Ni0zLjAxLjg2LTIuMzIgMC00LjI4LTEuNTYtNC45OC0zLjY2SDUuOTh2Mi4yOUMxLjk2IDE4LjQ4IDYuNDggMjEgMTIgMjF6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTcuMDIgMTMuMDVjLS4xOC0uNTMtLjI4LTEuMS0uMjgtMS42OXMuMS0xLjE2LjI4LTEuNjlWNy4zOEg1Ljk4QTguOTk3IDguOTk3IDAgMCAwIDMgMTJjMCAxLjk0LjYyIDMuNzMgMS42NiA1LjE5bDIuMzYtMi4xNHoiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNMTIgNi41OGMyLjEgMCAzLjk5LjcyIDUuNDcgMi4xMmwyLjU5LTIuNThDMTguMDUgNC4yMiAxNS4yNyAzIDEyIDNjLTUuNTIgMC0xMC4wNCAyLjUyLTEyIDYuMzhsMi4zNiAyLjE0YzcuLTIuMSA0LjI4LTMuNjYgNC45OC0zLjY2eiIgZmlsbD0iI2ZmZiIvPjwvZz48L3N2Zz4=');
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
     </style>
 
     <!-- jQuery first, then Bootstrap JS -->
@@ -79,7 +149,12 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-        <a class="navbar-brand" href="#">DVM Bus Booking System</a>
+        <a class="navbar-brand" href="#">
+            {% load static %}
+            <img src="{% static 'images/dvm logo.png' %}" alt="DVM Logo" onerror="this.style.display='none'">
+            DVM Bus Booking System
+        </a>
+        <!-- Rest of the navbar content remains the same -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
