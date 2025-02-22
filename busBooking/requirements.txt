@@ -1,0 +1,4 @@
+# Django and core dependencies
+Django==5.1.6
+django-allauth==0.61.0
+
