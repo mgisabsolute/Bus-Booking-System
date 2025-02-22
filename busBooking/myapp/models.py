@@ -1,6 +1,8 @@
 # Create your models here.
 from django.db import models
 from decimal import Decimal
+from django.contrib.auth.models import User as AuthUser
+
 
 
 # Create your models here.
@@ -80,7 +82,7 @@ class Book(models.Model):
     
 
 
-from django.contrib.auth.models import User as AuthUser
+
 
 class Wallet(models.Model):
     user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)

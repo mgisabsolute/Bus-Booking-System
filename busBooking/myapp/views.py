@@ -28,34 +28,29 @@ def findbus(request):
         dest_r = request.POST.get('destination')
         date_r = request.POST.get('date')
         seat_class_r = request.POST.get('seat_class', 'GEN')
-        
-        date_r = datetime.strptime(date_r,"%Y-%m-%d").date()
-        year = date_r.strftime("%Y")
-        month = date_r.strftime("%m")
-        day = date_r.strftime("%d")
-        
-        # Add seat_class filter if provided
+
+        date_r = datetime.strptime(date_r, "%Y-%m-%d").date()
+
         query_filter = {
-            'source': source_r, 
+            'source': source_r,
             'dest': dest_r,
-            'date__year': year,
-            'date__month': month,
-            'date__day': day
+            'date': date_r,
         }
-        
+
         if seat_class_r != 'ALL':
             query_filter['seat_class'] = seat_class_r
-            
+
         bus_list = Bus.objects.filter(**query_filter)
-        
-        if bus_list:
-            return render(request, 'myapp/list.html', locals())
-        else:
-            context['data'] = request.POST
-            context["error"] = "No available Bus Schedule for entered Route and Date"
-            return render(request, 'myapp/findbus.html', context)
-    else:
-        return render(request, 'myapp/findbus.html')
+
+        # Make sure we're calculating and assigning the price
+        for bus in bus_list:
+            # Assign the calculated price directly to a price attribute
+            bus.price = float(bus.get_price_by_class())
+
+        return render(request, 'myapp/list.html', {'bus_list': bus_list})
+
+    return render(request, 'myapp/findbus.html', context)
+
 
 @login_required(login_url='signin')
 def bookings(request):
@@ -66,7 +61,10 @@ def bookings(request):
         bus = Bus.objects.get(id=id_r)
 
         if bus:
-            total_cost = int(seats_r) * bus.get_price_by_class()
+            # Get the correct price based on seat class
+            seat_price = bus.get_price_by_class()
+            total_cost = seats_r * seat_price  # Adjusted cost
+
             wallet, created = Wallet.objects.get_or_create(user=request.user)
 
             # Check if user has enough funds
@@ -83,7 +81,7 @@ def bookings(request):
                 rem_r = bus.rem - seats_r
                 Bus.objects.filter(id=id_r).update(rem=rem_r)
 
-                # Create booking record with seat class
+                # Store the correct seat-class price in the booking
                 book = Book.objects.create(
                     name=request.user.username, 
                     email=request.user.email, 
@@ -92,7 +90,7 @@ def bookings(request):
                     source=bus.source, 
                     busid=id_r,
                     dest=bus.dest, 
-                    price=bus.price, 
+                    price=seat_price,  # FIXED: Store seat-class-adjusted price
                     nos=seats_r, 
                     date=bus.date, 
                     time=bus.time,
@@ -101,7 +99,7 @@ def bookings(request):
                 )
 
                 messages.success(request, f"Booking successful! ₹{total_cost} has been deducted from your wallet.")
-                return render(request, 'myapp/bookings.html', locals())
+                return render(request, 'myapp/bookings.html', {'book': book, 'cost': total_cost})  # Pass total cost
 
             else:
                 messages.error(request, "Not enough seats available. Please select fewer seats.")
@@ -125,8 +123,12 @@ def cancellings(request):
             rem_r = bus.rem + book.nos
             Bus.objects.filter(id=book.busid).update(rem=rem_r)
 
+            # Calculate refund based on seat class
+            seat_class = book.seat_class
+            refund_price = bus.get_price_by_class()  # This considers seat class
+            refund_amount = refund_price * book.nos  # Correct refund calculation
+
             # Process refund
-            refund_amount = book.price * book.nos
             wallet, created = Wallet.objects.get_or_create(user=request.user)
             wallet.balance += refund_amount
             wallet.save()
@@ -144,13 +146,18 @@ def cancellings(request):
 
 
 
+# views.py - Update the seebookings view
 @login_required(login_url='signin')
-def seebookings(request,new={}):
+def seebookings(request, new={}):
     context = {}
     id_r = request.user.id
     book_list = Book.objects.filter(userid=id_r)
+    
     if book_list:
-        return render(request, 'myapp/booklist.html', locals())
+        # The price is already stored correctly in the Book model
+        # from when the booking was created, so we don't need 
+        # additional calculations here
+        return render(request, 'myapp/booklist.html', {'book_list': book_list})
     else:
         context["error"] = "Sorry no buses booked"
         return render(request, 'myapp/findbus.html', context)

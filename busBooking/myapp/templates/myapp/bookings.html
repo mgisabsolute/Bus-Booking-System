@@ -7,7 +7,7 @@
     <div class="text-center">
         <form action="{% url 'seebookings' %}" method="post">
             {% csrf_token %}
-            <button type="button" class="btn btn-info rounded-0 col-lg-4 col-md-5 col-sm-6 col-xs-6" data-bs-toggle="modal" data-bs-target="#myModal">
+            <button type="button" class="btn btn-primary rounded-0 col-lg-4 col-md-5 col-sm-6 col-xs-6" data-bs-toggle="modal" data-bs-target="#myModal">
                 Details
             </button>
             <button type="submit" class="btn btn-primary rounded-0 col-lg-4 col-md-5 col-sm-6 col-xs-6">OK</button>
@@ -34,8 +34,8 @@
                     <li class="list-group-item" style="background-color: #ffffff;"><b>Starting point:</b> {{book.source}}</li>
                     <li class="list-group-item" style="background-color: #ffffff;"><b>Destination point:</b> {{book.dest}}</li>
                     <li class="list-group-item" style="background-color: #ffffff;"><b>Number of seats:</b> {{book.nos}}</li>
-                    <li class="list-group-item" style="background-color: #ffffff;"><b>Price:</b> {{book.price}}</li>
-                    <li class="list-group-item" style="background-color: #ffffff;"><b>Cost:</b> {{cost}}</li>
+                    <li class="list-group-item" style="background-color: #ffffff;"><b>Price per seat:</b> ₹{{ book.price }}</li>
+                    <li class="list-group-item" style="background-color: #ffffff;"><b>Total Cost:</b> ₹{{ cost }}</li>
                     <li class="list-group-item" style="background-color: #ffffff;"><b>Date:</b> {{book.date}}</li>
                     <li class="list-group-item" style="background-color: #fbfbfb;"><b>Time:</b> {{book.time}}</li>
                 </ul>
