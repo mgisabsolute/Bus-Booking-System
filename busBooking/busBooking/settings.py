@@ -77,12 +77,14 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-
+ACCOUNT_USERNAME_REQUIRED = True  # Ensure username is required
+ACCOUNT_EMAIL_REQUIRED = True  # Email is required
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}  # Allow login with both
+ACCOUNT_UNIQUE_EMAIL = True  # Ensure emails are unique
 LOGIN_REDIRECT_URL = 'home'  # or 'dashboard', etc.
 LOGOUT_REDIRECT_URL = 'logout'
 ACCONT_LOGOUT_REDIRECT_URL = 'login'
-
-
+SOCIALACCOUNT_AUTO_SIGNUP = False
 
 ROOT_URLCONF = 'busBooking.urls'
 
@@ -107,6 +109,10 @@ WSGI_APPLICATION = 'busBooking.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASES = {
     'default': {
