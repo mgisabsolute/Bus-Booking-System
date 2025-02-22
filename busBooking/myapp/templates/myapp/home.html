@@ -2,13 +2,9 @@
 {% block content %}
 <!-- In home.html -->
 <div class="container py-5">
-    <div class="card welcome-card">
-        <div class="card-body">
-            <h2 class="text-center mb-4">Welcome to DVM Bus Booking System</h2>
-            <div class="text-center">
-                <a href="{% url 'findbus' %}" class="btn btn-lg-custom">Book Your Journey</a>
-            </div>
-        </div>
+    <h2 class="text-center mb-4">Welcome to DVM Bus Booking System</h2>
+    <div class="text-center">
+        <a href="{% url 'findbus' %}" class="btn btn-lg-custom">Book Your Journey</a>
     </div>
 </div>
 {% endblock %}

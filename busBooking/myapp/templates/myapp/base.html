@@ -166,6 +166,10 @@
                 <a class="nav-item nav-link" href="{% url 'seebookings' %}">See Bookings</a>
                 {% if request.user.is_active %}
                 <a class="nav-item nav-link" href="{% url 'wallet_view' %}">My Wallet</a>
+                {% endif %}
+            </div>
+            <div class="navbar-nav ms-auto">
+                {% if request.user.is_active %}
                 <a class="nav-item nav-link" href="{% url 'signout' %}">Logout</a>
                 {% else %}
                 <a class="nav-item nav-link" href="{% url 'signup' %}">Registration</a>
